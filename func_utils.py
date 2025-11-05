@@ -54,7 +54,7 @@ def func1(M, NA,  n_immersion, lamda, n_sample, f_4f, ps_camera, ps_BFP, externa
         phase_mask = mask_dict[mask_name]
         g_sigma = 0.6
 
-    param_dict['g_sigma'] = (np.round(0.8*g_sigma, decimals=2), np.round(1.0*g_sigma, decimals=2))
+    param_dict['g_sigma'] = (np.round(0.8*g_sigma, decimals=2), np.round(1.2*g_sigma, decimals=2))
     param_dict['phase_mask'] = phase_mask
 
     # show z-PSF regarding the NFP
@@ -126,7 +126,7 @@ def func3(M, NA,  n_immersion, lamda, n_sample, f_4f, ps_camera, ps_BFP, externa
 
             baseline = (np.round(1.0*mu), np.round(1.4*mu))
             read_std = (np.round(1.0*std), np.round(1.4*std))
-            Nsig_range = (np.round(0.5*p/1e3)*1e3, np.round(1.1*p/1e3)*1e3)
+            Nsig_range = (np.round(0.4*p/1e3)*1e3, np.round(1.1*p/1e3)*1e3)
 
             # update param_dict
             param_dict['baseline'] = baseline
@@ -160,7 +160,7 @@ def func4(M, NA,  n_immersion, lamda, n_sample, f_4f, ps_camera, ps_BFP, externa
             param_dict['W'] = int(training_im_size)
             param_dict['D'] = int(num_z_voxel)
             param_dict['us_factor'] = int(us_factor)
-            param_dict['psf_half_size'] = 20  # pixels
+            param_dict['psf_half_size'] = 10  # pixels
             param_dict['num_particles_range'] = [1, int(max_num_particles)]
             param_dict['blob_r'] = 2
             param_dict['blob_sigma'] = 0.65
@@ -181,7 +181,7 @@ def func4(M, NA,  n_immersion, lamda, n_sample, f_4f, ps_camera, ps_BFP, externa
             param_dict['vs_xy'] = vs_xy
             param_dict['vs_z'] = vs_z
 
-            param_dict['td_folder'] = os.path.join(os.getcwd(), 'training_data', "one")  # where to save the training data
+            param_dict['td_folder'] = os.path.join(os.getcwd(), 'training_data', "gui")  # where to save the training data
             if projection_01 == 0:
                 param_dict['project_01'] = False  # seems better to not have 01 normalization
             else:

@@ -287,39 +287,41 @@ def show_z_psf(param_dict):
 
 def background_removal(im_folder, num=100):
     save_folder = im_folder + '_br'  # where to save the images after background removal
-    if os.path.exists(save_folder):
-        shutil.rmtree(save_folder)
-    os.makedirs(save_folder)
 
-    im_files = sorted(os.listdir(im_folder))  # make sure the names are sortable
-    n_ims = len(im_files)
-    if n_ims > num:
-        pointer = 0
-        for i in range(n_ims//num):
-            im_names = [im_files[pointer+j] for j in range(num)]
-            im_stack = [io.imread(os.path.join(im_folder, im_files[pointer+j])) for j in range(num)]
-            pointer += num
+    if os.path.exists(save_folder):
+        print('probably has been done!')
+    else:
+        os.makedirs(save_folder)
+
+        im_files = sorted(os.listdir(im_folder))  # make sure the names are sortable
+        n_ims = len(im_files)
+        if n_ims > num:
+            pointer = 0
+            for i in range(n_ims//num):
+                im_names = [im_files[pointer+j] for j in range(num)]
+                im_stack = [io.imread(os.path.join(im_folder, im_files[pointer+j])) for j in range(num)]
+                pointer += num
+                im_stack = np.array(im_stack)
+                im_stack = im_stack-np.min(im_stack, axis=0)
+
+                for j in range(num):  # save
+                    io.imsave(os.path.join(save_folder, im_names[j]), im_stack[j], check_contrast=False)
+
+            # remainder of n_ims/num
+            im_stack = [io.imread(os.path.join(im_folder, im_files[-j])) for j in range(num)]
+            im_stack = np.array(im_stack)
+            im_min = np.min(im_stack, axis=0)
+            for j in range(pointer, n_ims):
+                im = io.imread(os.path.join(im_folder, im_files[j]))
+                im = im-im_min
+                io.imsave(os.path.join(save_folder, im_files[j]), im, check_contrast=False)
+
+        else:
+            im_stack = [io.imread(os.path.join(im_folder, im_files[j])) for j in range(n_ims)]
             im_stack = np.array(im_stack)
             im_stack = im_stack-np.min(im_stack, axis=0)
-
-            for j in range(num):  # save
-                io.imsave(os.path.join(save_folder, im_names[j]), im_stack[j], check_contrast=False)
-
-        # remainder of n_ims/num
-        im_stack = [io.imread(os.path.join(im_folder, im_files[-j])) for j in range(num)]
-        im_stack = np.array(im_stack)
-        im_min = np.min(im_stack, axis=0)
-        for j in range(pointer, n_ims):
-            im = io.imread(os.path.join(im_folder, im_files[j]))
-            im = im-im_min
-            io.imsave(os.path.join(save_folder, im_files[j]), im, check_contrast=False)
-
-    else:
-        im_stack = [io.imread(os.path.join(im_folder, im_files[j])) for j in range(n_ims)]
-        im_stack = np.array(im_stack)
-        im_stack = im_stack-np.min(im_stack, axis=0)
-        for j in range(n_ims):
-            io.imsave(os.path.join(save_folder, im_files[j]), im_stack[j], check_contrast=False)
+            for j in range(n_ims):
+                io.imsave(os.path.join(save_folder, im_files[j]), im_stack[j], check_contrast=False)
 
     return save_folder
 
@@ -451,8 +453,9 @@ def training_func(param_dict, training_dict):
     optimizer = Adam(list(model.parameters()), lr=lr)
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=1, verbose=True,
                                   min_lr=1e-6)  # verbose True
-    if param_dict['us_factor']==1:
-        my_loss_func = torch.nn.MSELoss()
+    if param_dict['us_factor'] == 1:
+        # my_loss_func = torch.nn.MSELoss()
+        my_loss_func = KDE_loss3D(sigma=0.5, device=device)
     else:
         my_loss_func = KDE_loss3D(sigma=0.5*(param_dict['us_factor']/2), device=device)  # 0.5-2, 1.0-4
 

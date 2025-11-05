@@ -236,7 +236,7 @@ class ImModel(nn.Module):
         zstack = self.get_psfs(torch.from_numpy(xyzps).to(self.device)).cpu()
         plt.figure(figsize=(6, 2))
         plt.imshow(torch.cat([zstack[i] for i in range(zstack.shape[0])], dim=1))
-        plt.title(f'z positions [um]: {zs}')
+        plt.title(f'z positions [um]: {np.round(zs, 2)}')
         plt.axis('off')
         plt.savefig('PSFs.jpg', bbox_inches='tight', dpi=300)
         plt.clf()
@@ -432,7 +432,7 @@ class ImModelTraining(ImModelBase):
         std_min, std_max = self.g_sigma
         stds = (std_min + (std_max - std_min) * torch.rand((Nemitters, 1))).to(self.device)
         gaussian_kernels = [torch.exp(-0.5 * (self.g_xx ** 2 + self.g_yy ** 2) / stds[i] ** 2) for i in range(Nemitters)]  
-        gaussian_kernels = [kernel/kernel.sum() for kernel in gaussian_kernels] # normalization
+        gaussian_kernels = [kernel/kernel.sum() for kernel in gaussian_kernels]  # normalization
         gaussian_kernels = torch.stack(gaussian_kernels)
         return gaussian_kernels
 

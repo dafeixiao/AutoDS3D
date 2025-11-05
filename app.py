@@ -46,53 +46,56 @@ with gr.Blocks() as demo:
         # an accordion input set for optical parameters
         with gr.Accordion("parameter column 1", open=False):
             M = gr.Number(label="★objective magnification M", value=100)
-            NA = gr.Number(label="★numeric aperture NA", value=1.45)
+            NA = gr.Number(label="★numeric aperture NA", value=1.40)
             n_immersion = gr.Number(label="★refractive index of immersion medium", value=1.518)
-            lamda = gr.Number(label="emission wavelength lamda [um]", value=0.67)
+            lamda = gr.Number(label="emission wavelength lamda [um]", value=0.64)
             n_sample = gr.Number(label="★refractive index of sample", value=1.33)
+            ps_camera = gr.Number(label="★camera pixel size at image plane [um]", value=13.8)
+
             f_4f = gr.Number(label="focal length of the 4f setup [um]", value=100e3, visible=False)
-            ps_camera = gr.Number(label="★camera pixel size at image plane [um]", value=11)
             ps_BFP = gr.Number(label="■ pixel size of mask plane [um]", value=30, visible=False)
             external_mask = gr.Textbox(label="external mask", value='None', visible=False)
 
+
+
         # calibration z-stack parameters
         with gr.Accordion('parameter column 2', open=False):
-            zstack_file = gr.Textbox(label='★z-stack file (within app folder)', value=r'.\dataset1\zstack1_-35_20.tif')
-            nfp_text = gr.Textbox(label="★z-stack NFPs (start, end, number) [um]", value='-3.5, 2.0, 56')
+            zstack_file = gr.Textbox(label='★z-stack file (within app folder)', value=r'.\dataset3\calibration 1.tif')
+            nfp_text = gr.Textbox(label="★z-stack NFPs (start, end, number) [um]", value='-0.5, 0.5, 41')
             # zstack_file = gr.Textbox(label='★z-stack file (within app folder)', value=r'zstack2_-32_18.tif')
             # nfp_text = gr.Textbox(label="★z-stack NFPs (start, end, number) [um]", value='-3.2, 1.8, 51')
             # zstack_file = gr.Textbox(label='★z-stack file (within app folder)', value=r'zstack3_-06_06.tif')
             # nfp_text = gr.Textbox(label="★z-stack NFPs (start, end, number) [um]", value='-0.6, 0.6, 25')
 
-            NFP = gr.Number(label='★NFP [um]', value=1.5)  # 1.5
+            NFP = gr.Number(label='★NFP [um]', value=0.5)  # 1.5
             # NFP = gr.Number(label='★NFP [um]', value=2.0)
             # NFP = gr.Number(label='★NFP [um]', value=0.7)
 
-            zrange = gr.Textbox(label='★expected z range (z_min, z_max) [um]', value='0, 4')
+            zrange = gr.Textbox(label='★expected z range (z_min, z_max) [um]', value='0, 1.0')
             # zrange = gr.Textbox(label='★expected z range (z_min, z_max) [um]', value='0, 1.0')
 
-            raw_image_folder = gr.Textbox(label='★image folder (within app folder)', value=r'.\dataset1\ims')
+            raw_image_folder = gr.Textbox(label='★image folder (within app folder)', value=r'.\dataset3\ims')
             # raw_image_folder = gr.Textbox(label='★image folder (within app folder)', value=r'ims2')
             # raw_image_folder = gr.Textbox(label='★image folder (within app folder)', value=r'ims3')
 
-            snr_roi = gr.Textbox(label='★SNR detection ROI (r0, c0, r1, c1)', value='0, 0, 40, 40')
+            snr_roi = gr.Textbox(label='★SNR detection ROI (r0, c0, r1, c1)', value='0, 0, 20, 20')
             # photon_roi = gr.Textbox(label='★a sparse ROI [r0, c0, r1, c1]', value='0, 0, 80, 80')
             # photon_roi = gr.Textbox(label='★a sparse ROI (r0, c0, r1, c1)', value='80, 80, 100, 100')
 
-            max_pv = gr.Number(label='■ maximum pixel value (MPV)')
+            max_pv = gr.Number(label='■ maximum pixel value (MPV)', value=250)
             projection_01 = gr.Number(label='0-1 projection', visible=False)
 
         # blinking images
         with gr.Accordion('parameter column 3', open=False):
-            num_z_voxel = gr.Number(label='★number of voxels in z', value=81)
-            training_im_size = gr.Number(label='training image size', value=121)
+            num_z_voxel = gr.Number(label='★number of voxels in z', value=61)
+            training_im_size = gr.Number(label='training image size', value=61)
             us_factor = gr.Number(label='★up-sampling factor (options: 1, 2, 4)', value=1)
-            max_num_particles = gr.Number(label='maximum number of particles', value=35)
+            max_num_particles = gr.Number(label='maximum number of particles', value=20)
             num_training_images = gr.Number(label='number of training images', value=10000, visible=False)
 
             previous_param_dict = gr.Textbox(label="external training file", value='None')
 
-            test_idx = gr.Number(label='■ test image index', value=1)
+            test_idx = gr.Number(label='■ test image index', value=10)
             threshold = gr.Number(label='■ threshold (0-1000)', value=40)
 
     input_all = [M, NA,  n_immersion, lamda, n_sample, f_4f, ps_camera, ps_BFP, external_mask,
