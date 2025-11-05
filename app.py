@@ -50,10 +50,10 @@ with gr.Blocks() as demo:
             n_immersion = gr.Number(label="★refractive index of immersion medium", value=1.518)
             lamda = gr.Number(label="emission wavelength lamda [um]", value=0.67)
             n_sample = gr.Number(label="★refractive index of sample", value=1.33)
-            f_4f = gr.Number(label="focal length of the 4f setup  [um]", value=100e3)
-            ps_camera = gr.Number(label="★camera pixel size [um]", value=11)
-            ps_BFP = gr.Number(label="■ pixel size of mask plane [um]", value=30)
-            external_mask = gr.Textbox(label="external mask", value='None')
+            f_4f = gr.Number(label="focal length of the 4f setup [um]", value=100e3, visible=False)
+            ps_camera = gr.Number(label="★camera pixel size at image plane [um]", value=11)
+            ps_BFP = gr.Number(label="■ pixel size of mask plane [um]", value=30, visible=False)
+            external_mask = gr.Textbox(label="external mask", value='None', visible=False)
 
         # calibration z-stack parameters
         with gr.Accordion('parameter column 2', open=False):
@@ -80,7 +80,7 @@ with gr.Blocks() as demo:
             # photon_roi = gr.Textbox(label='★a sparse ROI (r0, c0, r1, c1)', value='80, 80, 100, 100')
 
             max_pv = gr.Number(label='■ maximum pixel value (MPV)')
-            projection_01 = gr.Number(label='0-1 projection')
+            projection_01 = gr.Number(label='0-1 projection', visible=False)
 
         # blinking images
         with gr.Accordion('parameter column 3', open=False):
@@ -88,7 +88,7 @@ with gr.Blocks() as demo:
             training_im_size = gr.Number(label='training image size', value=121)
             us_factor = gr.Number(label='★up-sampling factor (options: 1, 2, 4)', value=1)
             max_num_particles = gr.Number(label='maximum number of particles', value=35)
-            num_training_images = gr.Number(label='number of training images', value=10000)
+            num_training_images = gr.Number(label='number of training images', value=10000, visible=False)
 
             previous_param_dict = gr.Textbox(label="external training file", value='None')
 
