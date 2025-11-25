@@ -453,11 +453,13 @@ def training_func(param_dict, training_dict):
     optimizer = Adam(list(model.parameters()), lr=lr)
     scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=1, verbose=True,
                                   min_lr=1e-6)  # verbose True
-    if param_dict['us_factor'] == 1:
-        # my_loss_func = torch.nn.MSELoss()
-        my_loss_func = KDE_loss3D(sigma=0.5, device=device)
-    else:
-        my_loss_func = KDE_loss3D(sigma=0.5*(param_dict['us_factor']/2), device=device)  # 0.5-2, 1.0-4
+
+    my_loss_func = KDE_loss3D(sigma=1.0, device=device)
+    # if param_dict['us_factor'] == 1:
+    #     # my_loss_func = torch.nn.MSELoss()
+    #     my_loss_func = KDE_loss3D(sigma=0.5, device=device)
+    # else:
+    #     my_loss_func = KDE_loss3D(sigma=0.5*(param_dict['us_factor']/2), device=device)  # 0.5-2, 1.0-4
 
     trainer = TorchTrainer(model, my_loss_func, optimizer, lr_scheduler=scheduler, device=device)
 
